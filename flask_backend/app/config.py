@@ -1,25 +1,32 @@
 import os
-from dotenv import load_dotenv
+from dataclasses import dataclass
 
-load_dotenv()
 
 # PUBLIC_INTERFACE
-def get_config() -> dict:
-    """Load application configuration from environment variables.
+def get_env(name: str, default: str | None = None) -> str:
+    """Retrieve an environment variable or default value.
+
+    Args:
+        name: The name of the environment variable.
+        default: Default value to use if not set.
 
     Returns:
-        dict: Flask configuration mapping including SQLAlchemy URI and app secrets.
+        The environment variable value or the provided default.
+
+    Raises:
+        RuntimeError: If the variable is not set and no default provided.
     """
-    database_url = os.getenv("DATABASE_URL", "").strip()
-    if not database_url:
-        raise RuntimeError("DATABASE_URL is required. Please set it in the environment or .env file.")
+    value = os.getenv(name, default)
+    if value is None:
+        raise RuntimeError(f"Missing required environment variable: {name}")
+    return value
 
-    jwt_secret = os.getenv("JWT_SECRET", "").strip()
-    if not jwt_secret:
-        raise RuntimeError("JWT_SECRET is required. Please set it in the environment or .env file.")
 
-    return {
-        "SQLALCHEMY_DATABASE_URI": database_url,
-        "SQLALCHEMY_TRACK_MODIFICATIONS": False,
-        "JWT_SECRET": jwt_secret,
-    }
+@dataclass
+class Config:
+    """Base configuration loaded from environment variables."""
+    SQLALCHEMY_DATABASE_URI: str = get_env("DATABASE_URL", "sqlite:///smarttutor.db")
+    SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
+    JWT_SECRET: str = get_env("JWT_SECRET", "dev_only_secret_change_me")
+    ENV: str = os.getenv("FLASK_ENV", "development")
+    DEBUG: bool = os.getenv("FLASK_DEBUG", "1") == "1"

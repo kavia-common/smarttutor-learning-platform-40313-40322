@@ -1,22 +1,35 @@
-from datetime import datetime
-from sqlalchemy import String, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from ..db import db
+from __future__ import annotations
 
-class User(db.Model):
-    """User accounts for students and tutors."""
+from datetime import datetime
+from sqlalchemy import String, DateTime, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from ..db import Base
+
+
+class User(Base):
+    """Represents a platform user (student or tutor)."""
+
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    # Store hash only; actual hashing handled elsewhere in auth flows
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[str] = mapped_column(String(32), nullable=False, default="student")  # 'student' or 'tutor' or 'admin'
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    is_tutor: Mapped[bool] = mapped_column(default=False, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
 
-    enrollments = relationship("Enrollment", back_populates="user", cascade="all, delete-orphan")
-    messages = relationship("ChatMessage", back_populates="user", cascade="all, delete-orphan")
-    payments = relationship("Payment", back_populates="user", cascade="all, delete-orphan")
-
-    def __repr__(self) -> str:
-        return f"<User {self.id} {self.email}>"
+    # Relationships
+    courses: Mapped[list["Course"]] = relationship(
+        "Course", back_populates="tutor", cascade="all,delete-orphan"
+    )
+    enrollments: Mapped[list["Enrollment"]] = relationship(
+        "Enrollment", back_populates="user", cascade="all,delete-orphan"
+    )
+    chat_messages: Mapped[list["ChatMessage"]] = relationship(
+        "ChatMessage", back_populates="user", cascade="all,delete-orphan"
+    )
