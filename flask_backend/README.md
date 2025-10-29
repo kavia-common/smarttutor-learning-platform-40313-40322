@@ -46,6 +46,8 @@ Getting started:
 1) Copy .env.example -> .env and set environment variables.
    - DATABASE_URL: PostgreSQL connection string, e.g. postgresql+psycopg://user:pass@localhost:5432/smarttutor
    - JWT_SECRET: a random secret for JWT signing
+   - STRIPE_SK: Stripe secret key for creating payment intents
+   - CORS_ORIGINS: Comma-separated origins (e.g., http://localhost:3000)
 2) Create venv and install deps:
    python -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
@@ -53,8 +55,21 @@ Getting started:
    alembic upgrade head
 4) Seed initial data (optional):
    python seed.py
+   - Seeds users, a sample course, and lessons for quick E2E verification
 5) Run in development:
    python run_dev.py
+
+Docker Compose:
+- Compose file at ../docker-compose.yml builds backend and a Postgres service.
+- On container start, migrations run automatically; seed.py is attempted (non-fatal).
+- To re-run seeding:
+  docker compose exec backend python seed.py
+
+E2E verification from backend perspective:
+- Health: GET http://localhost:8000/health
+- Status: GET http://localhost:8000/api/status
+- Payments: POST http://localhost:8000/api/payments/intent (requires STRIPE_SK)
+- OpenAPI: GET http://localhost:8000/openapi.json
 
 Docs and utilities:
 - ENVIRONMENT.md for environment variables and Docker Compose notes

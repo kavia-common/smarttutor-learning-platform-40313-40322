@@ -1,7 +1,9 @@
 version: "3.9"
+
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:15-alpine
+    container_name: smarttutor_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -13,23 +15,46 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d smarttutor"]
       interval: 5s
-      timeout: 3s
+      timeout: 5s
       retries: 10
 
   backend:
     build:
-      context: ./smarttutor-learning-platform-40313-40322/flask_backend
+      context: ./flask_backend
+      dockerfile: Dockerfile
+    container_name: smarttutor_backend
     env_file:
-      - ./smarttutor-learning-platform-40313-40322/flask_backend/.env
+      - ./flask_backend/.env
     environment:
-      - DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/smarttutor
-      - PORT=8000
+      # Ensure DATABASE_URL points to service 'db'
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://postgres:postgres@db:5432/smarttutor}
+      JWT_SECRET: ${JWT_SECRET:-dev_change_me}
+      STRIPE_SK: ${STRIPE_SK:-sk_test_change_me}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      HOST: 0.0.0.0
+      PORT: 8000
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8000:8000"
-    command: ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "wsgi:app"]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./react_frontend
+      dockerfile: Dockerfile
+    container_name: smarttutor_frontend
+    environment:
+      # Build-time variables for Vite; if running dev server use different service
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000/api}
+      VITE_WS_BASE_URL: ${VITE_WS_BASE_URL:-ws://localhost:8000}
+      VITE_STRIPE_PK: ${VITE_STRIPE_PK:-pk_test_change_me}
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
 
 volumes:
   db_data:

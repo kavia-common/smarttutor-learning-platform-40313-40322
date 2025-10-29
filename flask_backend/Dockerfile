@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# SmartTutor Flask Backend Dockerfile
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -7,18 +7,27 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# System deps
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*
+# System deps (psycopg binary uses libpq; install curl for health checks)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl build-essential gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Python deps
+# Copy requirement files first for better caching
 COPY requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt && pip install gunicorn==21.2.0
 
-# Copy app
+# Install dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Copy source
 COPY . /app
 
-# Expose Flask/Gunicorn port
+# Expose backend port
 EXPOSE 8000
 
-# Default command: run via gunicorn wsgi:app
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "wsgi:app"]
+# Default environment (override with .env in compose)
+ENV HOST=0.0.0.0
+ENV PORT=8000
+
+# Run migrations on start then launch app
+# Using a small entrypoint script for clarity
+CMD bash -lc "alembic upgrade head && python seed.py || true; python wsgi.py"
