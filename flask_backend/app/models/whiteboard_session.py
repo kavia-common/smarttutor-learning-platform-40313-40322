@@ -1,22 +1,28 @@
+"""
+WhiteboardSession model representing a collaborative whiteboard timeline per course or lesson.
+"""
 from __future__ import annotations
 
 from datetime import datetime
-from sqlalchemy import ForeignKey, DateTime, func
+from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from ..db import db
 
-from ..db import Base
 
-
-class WhiteboardSession(Base):
-    """Represents a whiteboard session tied to a course/lesson."""
+class WhiteboardSession(db.Model):
+    """Represents a whiteboard session (e.g., per live session or per lesson)."""
 
     __tablename__ = "whiteboard_sessions"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    course_id: Mapped[int | None] = mapped_column(ForeignKey("courses.id"), index=True)
-    lesson_id: Mapped[int | None] = mapped_column(ForeignKey("lessons.id"), index=True)
-    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"), nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False, default="Session")
 
-    events: Mapped[list["WhiteboardEvent"]] = relationship(
-        "WhiteboardEvent", back_populates="session", cascade="all,delete-orphan"
-    )
+    created_by_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow, nullable=False)
+
+    course = relationship("Course", backref="whiteboard_sessions")
+    # created_by optional relationship omitted for brevity
+
+    def __repr__(self) -> str:
+        return f"<WhiteboardSession id={self.id} course_id={self.course_id}>"
