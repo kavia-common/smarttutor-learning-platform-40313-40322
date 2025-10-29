@@ -1,0 +1,33 @@
+# Exclude local environments and caches
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VCS
+.git
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Local env files (provide via env or docker secrets)
+.env
+.env.local
+.env.test
+.env.test.example
+
+# Coverage and test artifacts
+.coverage
+htmlcov/
+
+# Node modules (if copied accidentally)
+node_modules/

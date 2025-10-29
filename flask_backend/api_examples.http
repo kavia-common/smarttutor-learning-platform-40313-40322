@@ -1,0 +1,51 @@
+@base=http://localhost:8000
+
+### Health
+GET {{base}}/health
+
+### Status
+GET {{base}}/api/status
+
+### OpenAPI JSON
+GET {{base}}/openapi.json
+
+### Diagnostics - Routes
+GET {{base}}/api/diag/routes
+
+### Diagnostics - Alembic
+GET {{base}}/api/diag/alembic
+
+### Auth - Register (dev)
+POST {{base}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password",
+  "name": "User"
+}
+
+### Auth - Login (dev)
+POST {{base}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password"
+}
+
+### Auth - Profile (dev)
+GET {{base}}/api/auth/profile
+Authorization: Bearer dev-token-for-user@example.com
+
+### Catalog - List Courses
+GET {{base}}/api/courses?page=1&per_page=5
+
+### Catalog - Get Course
+GET {{base}}/api/courses/1
+
+### Catalog - List Lessons
+GET {{base}}/api/courses/1/lessons
+
+### WS Help
+GET {{base}}/api/ws-help

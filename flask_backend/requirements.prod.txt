@@ -1,0 +1,2 @@
+# Production-only extras layered on top of requirements.txt
+gunicorn==22.0.0

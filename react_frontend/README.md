@@ -1,6 +1,14 @@
 # react_frontend
 
-A new Flutter project.
+A React (Vite + TypeScript) web app scaffold.
+
+Backend integration:
+- Configure VITE_API_BASE_URL in .env (see .env.example), e.g. http://localhost:8000/api
+- For websockets (future), set VITE_WS_BASE_URL
+
+Run:
+- npm install
+- npm run dev  # http://localhost:3000
 
 ## Getting Started
 

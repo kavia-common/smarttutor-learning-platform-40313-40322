@@ -1,0 +1,3 @@
+# PUBLIC_INTERFACE
+APP_NAME = "SmartTutor Backend"
+APP_VERSION = "0.1.0"

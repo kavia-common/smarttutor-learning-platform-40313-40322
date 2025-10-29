@@ -1,0 +1,5 @@
+# Minimal metadata to help Flutter tooling detect a project context when scanning the repo.
+version:
+  revision: "hybrid-workspace"
+  channel: "stable"
+project_type: app

@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: smarttutor
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d smarttutor"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: ./smarttutor-learning-platform-40313-40322/flask_backend
+    env_file:
+      - ./smarttutor-learning-platform-40313-40322/flask_backend/.env
+    environment:
+      - DATABASE_URL=postgresql+psycopg://postgres:postgres@db:5432/smarttutor
+      - PORT=8000
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    command: ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "wsgi:app"]
+
+volumes:
+  db_data:

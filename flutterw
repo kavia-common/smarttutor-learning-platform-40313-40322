@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# flutterw - simple wrapper to run Flutter commands from repo root in a hybrid workspace.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="${ROOT}/smarttutor-learning-platform-40313-40322/react_frontend"
+
+if [[ ! -d "$APP_DIR" ]]; then
+  echo "Flutter app directory not found: $APP_DIR" >&2
+  exit 2
+fi
+
+if ! command -v flutter >/dev/null 2>&1; then
+  echo "flutter command not found in PATH." >&2
+  exit 127
+fi
+
+cd "$APP_DIR"
+flutter "$@"

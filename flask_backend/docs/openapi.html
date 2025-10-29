@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>SmartTutor API Docs</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+      header { padding: 10px 16px; background: #111827; color: #fff; }
+      header h1 { margin: 0; font-size: 16px; }
+      .bar { padding: 8px 16px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: flex; gap: 8px; align-items: center; }
+      .bar input { flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid #d1d5db; }
+      .bar button { padding: 8px 12px; border-radius: 8px; border: 1px solid #2563eb; background: #2563eb; color: #fff; cursor: pointer; }
+      .bar small { color: #6b7280; }
+    </style>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+  </head>
+  <body>
+    <header><h1>SmartTutor API Docs (Redoc)</h1></header>
+    <div class="bar">
+      <input id="specUrl" value="/openapi.json" />
+      <button onclick="loadSpec()">Load</button>
+      <small>Default: /openapi.json</small>
+    </div>
+    <redoc id="redoc" spec-url="/openapi.json"></redoc>
+    <script>
+      function loadSpec() {
+        const url = document.getElementById('specUrl').value || '/openapi.json';
+        const el = document.getElementById('redoc');
+        el.setAttribute('spec-url', url);
+        // Redoc auto reloads when spec-url attribute changes.
+      }
+    </script>
+  </body>
+</html>

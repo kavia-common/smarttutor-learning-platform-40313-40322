@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+dist/
+build/
+.eggs/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+
+# Alembic
+alembic.sqlite
+
+# Editors
+.vscode/
+.idea/
+
+# Docs output
+docs/openapi.json

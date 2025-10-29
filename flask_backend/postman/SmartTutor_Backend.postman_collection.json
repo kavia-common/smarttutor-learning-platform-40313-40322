@@ -1,0 +1,81 @@
+{
+  "info": {
+    "name": "SmartTutor Backend",
+    "_postman_id": "8b6a7b1f-8d6c-4a2e-9d1b-000000000001",
+    "description": "Collection to test SmartTutor Flask backend endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": { "method": "GET", "url": "{{base_url}}/health" }
+    },
+    {
+      "name": "Status",
+      "request": { "method": "GET", "url": "{{base_url}}/api/status" }
+    },
+    {
+      "name": "OpenAPI JSON",
+      "request": { "method": "GET", "url": "{{base_url}}/openapi.json" }
+    },
+    {
+      "name": "Diagnostics - Routes",
+      "request": { "method": "GET", "url": "{{base_url}}/api/diag/routes" }
+    },
+    {
+      "name": "Diagnostics - Alembic",
+      "request": { "method": "GET", "url": "{{base_url}}/api/diag/alembic" }
+    },
+    {
+      "name": "Auth - Register (dev)",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\",\n  \"name\": \"User\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Auth - Login (dev)",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Auth - Profile (dev)",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/auth/profile",
+        "header": [{ "key": "Authorization", "value": "Bearer dev-token-for-user@example.com" }]
+      }
+    },
+    {
+      "name": "Catalog - List Courses",
+      "request": { "method": "GET", "url": "{{base_url}}/api/courses?page=1&per_page=5" }
+    },
+    {
+      "name": "Catalog - Get Course",
+      "request": { "method": "GET", "url": "{{base_url}}/api/courses/1" }
+    },
+    {
+      "name": "Catalog - List Lessons",
+      "request": { "method": "GET", "url": "{{base_url}}/api/courses/1/lessons" }
+    },
+    {
+      "name": "WS Help",
+      "request": { "method": "GET", "url": "{{base_url}}/api/ws-help" }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000" }
+  ]
+}

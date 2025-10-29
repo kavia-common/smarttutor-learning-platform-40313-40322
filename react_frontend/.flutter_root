@@ -1,0 +1,2 @@
+# Marker file for CI/tooling to identify this directory as the Flutter project root.
+# Some analyzers in hybrid repos look for this presence to set the working dir correctly.
