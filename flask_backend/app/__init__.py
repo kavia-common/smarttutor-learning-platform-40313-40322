@@ -1,101 +1,52 @@
+"""
+Flask application factory for SmartTutor backend.
+
+Creates the Flask app, configures SQLAlchemy and Alembic integration,
+and registers blueprints (future). Reads DATABASE_URL and JWT_SECRET from environment variables.
+
+Environment variables required (configure in .env):
+- DATABASE_URL: SQLAlchemy DB URL (e.g., postgresql+psycopg://user:pass@host:5432/dbname)
+- JWT_SECRET: secret for JWT tokens (used by auth, future)
+"""
+from __future__ import annotations
+
+import os
 from flask import Flask
-from .config import get_config
 from .db import db
+
+
+def _get_database_url() -> str:
+    """Return database URL from env or raise informative error."""
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        raise RuntimeError(
+            "DATABASE_URL is not set. Create .env from .env.example and set DATABASE_URL."
+        )
+    return url
+
 
 # PUBLIC_INTERFACE
 def create_app() -> Flask:
-    """Create and configure the Flask application.
-
-    Returns:
-        Flask: The configured Flask application instance.
-    """
+    """Application factory for the SmartTutor Flask app."""
     app = Flask(__name__)
-    cfg = get_config()
-    app.config.from_mapping(cfg)
 
-    # Configure logging and print startup banner
-    try:
-        from .logging_config import configure_logging
-        configure_logging()
-    except Exception:
-        pass
-    try:
-        from .startup import print_startup_banner
-        print_startup_banner()
-    except Exception:
-        pass
+    # Minimal configuration
+    app.config["SQLALCHEMY_DATABASE_URI"] = _get_database_url()
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Enable CORS for local development
-    try:
-        from .cors import enable_cors
-        enable_cors(app)
-    except Exception:
-        pass
-
-    # Initialize DB
+    # Initialize database
     db.init_app(app)
 
-    # Ensure models are imported so Alembic can autogenerate properly
-    with app.app_context():
-        from .models import (  # noqa: F401
-            user, course, lesson, enrollment, chat_message,
-            whiteboard_session, whiteboard_event, payment, recommendations_cache
-        )
-
-    # Register all optional routes in one place
-    try:
-        from .register_routes import register_all
-        register_all(app)
-    except Exception:
-        pass
-
-    # Register Alembic diagnostics
-    try:
-        from .register_alembic import register_alembic_routes
-        register_alembic_routes(app)
-    except Exception:
-        pass
-    # Also include versions endpoints explicitly
-    try:
-        from .routes_versions import versions_bp
-        app.register_blueprint(versions_bp)
-    except Exception:
-        pass
-
-    # Register OpenAPI endpoint if builder/register is present
-    try:
-        from .openapi_register import register_openapi
-        register_openapi(app)
-    except Exception:
-        pass
-
-    # Register modular routes if available
-    try:
-        from .register_routes import register_all_routes
-        register_all_routes(app)
-    except Exception:
-        pass
-    # Register Alembic diagnostics
-    try:
-        from .register_alembic import register_alembic_routes
-        register_alembic_routes(app)
-    except Exception:
-        pass
-
-    # OpenAPI JSON route
-    try:
-        from .openapi_register import build_openapi
-        @app.get("/openapi.json")
-        def openapi_json():
-            """Return the OpenAPI specification JSON."""
-            return build_openapi(app)
-    except Exception:
-        pass
-
-    # Simple health check for now
+    # Simple health route
     @app.get("/health")
     def health():
-        """Health check endpoint."""
+        """Healthcheck endpoint."""
         return {"status": "ok"}
+
+    # Placeholder status route for quick smoke
+    @app.get("/api/status")
+    def api_status():
+        """Backend status endpoint."""
+        return {"api": "smarttutor", "status": "ready"}
 
     return app

@@ -17,8 +17,8 @@ Backend (Flask):
 2) cp .env.example .env  # Update DATABASE_URL and JWT_SECRET
 3) python -m venv .venv && . .venv/bin/activate
 4) pip install -r requirements.txt
-5) alembic upgrade head
-6) python seed.py  # optional
+5) alembic upgrade head  # applies initial migration (migrations/versions/0001_initial.py)
+6) python seed.py  # optional – adds sample users, course, and lessons
 7) python wsgi.py  # http://localhost:8000/health
 
 Docs:
