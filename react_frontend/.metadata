@@ -1,5 +1,6 @@
-# This file allows Flutter tooling to detect the project root in hybrid repos.
+# This file tracks properties of this Flutter project.
 version:
-  revision: "not-applicable"
+  revision: "unknown"
   channel: "stable"
+
 project_type: app

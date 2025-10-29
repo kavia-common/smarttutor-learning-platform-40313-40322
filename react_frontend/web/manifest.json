@@ -1,0 +1,12 @@
+{
+  "name": "SmartTutor",
+  "short_name": "SmartTutor",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#F9FAFB",
+  "theme_color": "#2563EB",
+  "description": "SmartTutor - Ocean Professional Flutter App",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": []
+}
