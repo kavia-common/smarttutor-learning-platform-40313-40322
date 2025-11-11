@@ -1,16 +1,20 @@
 # react_frontend
 
-A new Flutter project.
+A Flutter mobile project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+- Ensure Flutter SDK is installed.
+- Navigate to this directory and run:
+  ```
+  flutter pub get
+  flutter test
+  flutter run
+  ```
+- For build steps and details about changes made to fix the missing `lib/main.dart` error, see `README_SETUP_NOTES.md`.
 
-A few resources to get you started if this is your first Flutter project:
+### Resources
 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Flutter online documentation](https://docs.flutter.dev/)
