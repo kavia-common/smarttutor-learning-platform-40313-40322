@@ -54,6 +54,14 @@ html
 3.2
 file:///home/kavia/.pub-cache/hosted/pub.dev/html-0.15.6/
 file:///home/kavia/.pub-cache/hosted/pub.dev/html-0.15.6/lib/
+http
+3.4
+file:///home/kavia/.pub-cache/hosted/pub.dev/http-1.6.0/
+file:///home/kavia/.pub-cache/hosted/pub.dev/http-1.6.0/lib/
+http_parser
+3.4
+file:///home/kavia/.pub-cache/hosted/pub.dev/http_parser-4.1.2/
+file:///home/kavia/.pub-cache/hosted/pub.dev/http_parser-4.1.2/lib/
 intl
 3.0
 file:///home/kavia/.pub-cache/hosted/pub.dev/intl-0.19.0/
@@ -194,6 +202,10 @@ test_api
 3.5
 file:///home/kavia/.pub-cache/hosted/pub.dev/test_api-0.7.4/
 file:///home/kavia/.pub-cache/hosted/pub.dev/test_api-0.7.4/lib/
+typed_data
+3.5
+file:///home/kavia/.pub-cache/hosted/pub.dev/typed_data-1.4.0/
+file:///home/kavia/.pub-cache/hosted/pub.dev/typed_data-1.4.0/lib/
 vector_math
 2.14
 file:///home/kavia/.pub-cache/hosted/pub.dev/vector_math-2.1.4/
