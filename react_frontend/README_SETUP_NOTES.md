@@ -27,7 +27,7 @@ Notes:
 Environment variables:
 - The pubspec lists `.env` in assets. If you need runtime configuration, provide a `.env` file at the project root:
   - Do NOT commit secrets.
-  - Provide a `.env.example` with keys only.
+  - Provide a `.env.example` with keys only (one is included).
 
 Acceptance Criteria Mapping:
 - lib/main.dart now exists and contains a valid `main()` that calls `runApp`.
